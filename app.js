@@ -10,7 +10,7 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-
+var employees = [];
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 console.log("Please build your team.");
@@ -36,12 +36,12 @@ inquirer.prompt([
     },
 
     {
-        name: "store",
-        message: "What is your manager's store number?",
+        name: "office",
+        message: "What is your manager's office number?",
         type: "input"
     }
 ]).then(function (managerAnswers) {
-    const manager = new Manager(managerAnswers.name, managerAnswers.id, managerAnswers.email, managerAnswers.store);
+    const manager = new Manager(managerAnswers.name, managerAnswers.id, managerAnswers.email, managerAnswers.office);
     employees.push(manager);
     //Inquirer Prompt #2
     inquirer.prompt([
