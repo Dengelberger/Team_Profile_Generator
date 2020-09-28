@@ -45,84 +45,90 @@ inquirer.prompt([
     const manager = new Manager(managerAnswers.name, managerAnswers.id, managerAnswers.email, managerAnswers.office);
     employees.push(manager);
     //Inquirer Prompt #2
-    inquirer.prompt([
-        {
-        name: "type",
-        message: "Which type of team member would you like to add?",
-        type: "list",
-        choices: ["Engineer", "Intern", "No more team members"]
-        },
-        console.log(typeAnswers)
-
-    ]).then(function (typeAnswers) {
-        if (typeAnswers === "Engineer") {
-            //Inquirer Prompt #3
-            inquirer.prompt([
-                {
-                    name: "name",
-                    message: "What is your engineer's name?",
-                    type: "input"
-                },
-
-                {
-                    name: "id",
-                    message: "What is your engineer's id number?",
-                    type: "input"
-                },
-                {
-                    name: "email",
-                    message: "What is your engineer's email address?",
-                    type: "input"
-                },
-                {
-                    name: "github",
-                    message: "What is your engineer's github name?",
-                    type: "input"
-                }
-            ]).then(function (engineerAnswers) {
-                const engineer = new Engineer(engineerAnswers.name, engineerAnswers.id, engineerAnswers.email, engineerAnswers.github);
-                employees.push(engineer);
-            }
-
-            )} else if (typeAnswers === "Intern") {
-        //Inquirer Prompt #3
+    addOtherEmployees();
+    function addOtherEmployees() {
         inquirer.prompt([
             {
-                name: "name",
-                message: "What is your intern's name?",
-                type: "input"
+                name: "type",
+                message: "Which type of team member would you like to add?",
+                type: "list",
+                choices: ["Engineer", "Intern", "No more team members"]
             },
+        ]).then(function (typeAnswers) {
+            console.log(typeAnswers)
+            if (typeAnswers.type === "Engineer") {
+                //Inquirer Prompt #3
+                inquirer.prompt([
+                    {
+                        name: "name",
+                        message: "What is your engineer's name?",
+                        type: "input"
+                    },
 
-            {
-                name: "id",
-                message: "What is your intern's id number?",
-                type: "input"
-            },
-            {
-                name: "email",
-                message: "What is your intern's email address?",
-                type: "input"
-            },
-            {
-                name: "school",
-                message: "What is your intern's school name?",
-                type: "input"
+                    {
+                        name: "id",
+                        message: "What is your engineer's id number?",
+                        type: "input"
+                    },
+                    {
+                        name: "email",
+                        message: "What is your engineer's email address?",
+                        type: "input"
+                    },
+                    {
+                        name: "github",
+                        message: "What is your engineer's github name?",
+                        type: "input"
+                    }
+                ]).then(function (engineerAnswers) {
+                    const engineer = new Engineer(engineerAnswers.name, engineerAnswers.id, engineerAnswers.email, engineerAnswers.github);
+                    employees.push(engineer);
+                    addOtherEmployees();
+                }
+
+                )
+            } else if (typeAnswers.type === "Intern") {
+                //Inquirer Prompt #3
+                inquirer.prompt([
+                    {
+                        name: "name",
+                        message: "What is your intern's name?",
+                        type: "input"
+                    },
+
+                    {
+                        name: "id",
+                        message: "What is your intern's id number?",
+                        type: "input"
+                    },
+                    {
+                        name: "email",
+                        message: "What is your intern's email address?",
+                        type: "input"
+                    },
+                    {
+                        name: "school",
+                        message: "What is your intern's school name?",
+                        type: "input"
+                    }
+                ]).then(function (internAnswers) {
+                    const intern = new Intern(internAnswers.name, internAnswers.id, internAnswers.email, internAnswers.school);
+                    employees.push(intern);
+                    addOtherEmployees();
+                }
+                )
+            } else {
+                const html = render(employees);
+                fs.writeFile(outputPath, html, function (err) {
+                    if (err)
+                        throw err;
+
+                    console.log("Success!");
+                });
             }
-        ]).then(function (internAnswers) {
-            const intern = new Intern(internAnswers.name, internAnswers.id, internAnswers.email, internAnswers.school);
-            employees.push(intern);
-        }
-        )} else {
-        const html = render(employees);
-        fs.writeFile(outputPath, html, function(err) {
-            if(err)
-            throw err;
-            
-            console.log("Success!");
-        });
+        })
     }
 });
-})
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
